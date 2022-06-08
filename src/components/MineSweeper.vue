@@ -28,6 +28,8 @@
                 </button>
             </div>
         </div>
+
+
         <div
             class="mine-sweeper-container"
             @contextmenu.prevent
@@ -48,22 +50,23 @@
                     @click="start()"
                 >
                     <span
-                        v-if="markStatus[(i-1)*width+(j-1)] === 1"
+                        v-if="markStatus[(i-1)*width+(j-1)] == 1"
                         class="iconfont" 
                     >&#xe778;</span>
                     
                     <span
-                        v-else-if="markStatus[(i-1)*width+(j-1)] === 2"
+                        v-else-if="markStatus[(i-1)*width+(j-1)] == 2"
                         class="iconfont"
                     >&#xe720;</span>
                     <template v-else-if="openStatus[(i-1)*width+(j-1)]">
                         <span
-                            v-if="mines[(i-1)*width+(j-1)]"
+                            v-if="mines[((i-1)*width+j-1)]"
                             class="iconfont"
                         >&#xe63a;</span>
-                        <span v-else-if="neighbourMineCount[(i-1)*width+(j-1)]>0">
+                        <span v-if="neighbourMineCount[(i-1)*width+(j-1)]>0">
                             {{ neighbourMineCount[(i-1)*width+(j-1)] }}
                         </span>
+                        
                     </template>
                 </div>
             </div>
@@ -179,31 +182,37 @@ export default {
             this.selectedMineCount = 0;
         },
         handleLeftClick (x, y) {
+            const index = x * this.width + y;
+            console.log('周围有'+this.neighbourMineCount[index]+'个雷');
             if (this.isEnd) {
                 return;
             }
-            const index = x * this.width + y;
             if (this.openStatus[index] === 1 || this.markStatus[index] === 1) {
                 //如果这个格子已经点出来了或者标记了，返回
                 return;
             }
 
             if (this.mines[index]) {//刚好点到炸弹
-               // this.openStatus.splice(index, 1, 1);
-                this.isEnd = true;
+               this.openStatus.splice(index, 1, 1);//显示炸弹动画
+               // this.openStatus[index]===3;
+               console.log('你中雷了');
                 this.$nextTick(() => {
                     alert('mine');
                 });
-
+                this.isEnd = true;
                 return;
             }
-            if (this.neighbourMineCount[index] > 0) {
+            if (this.neighbourMineCount[index] > 0) {//刚好点到非空邻居节点上
                 this.openStatus.splice(index, 1, 1);
                 return;
             }
+            //若点到为零的邻居点，即空白点，执行floodfill函数
             this.floodfill(x, y);
         },
-        floodfill (x, y) {
+        ale(){
+            alert('mine');
+        },
+        floodfill (x, y) {//若此点周围邻居都是0，向潮水一样扩散，直到碰到边界或者大于零的邻居节点
             if (x < 0 || y < 0 || x === this.height || y === this.width) {
                 return;
             }
@@ -222,6 +231,7 @@ export default {
             }
         },
         handleRightClick (x, y) {
+            console.log('标记('+x+','+y+')点');
             if (this.isEnd) {
                 return;
             }
@@ -242,7 +252,7 @@ export default {
 
             this.loop=setTimeout(() => {
 
-            console.log("长按了");
+           // console.log("长按了");
 
         },  1000);
 

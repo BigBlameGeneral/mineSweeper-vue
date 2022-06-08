@@ -78,11 +78,9 @@ export default {
         handleMinMaxChange () {
             if (this.value > this.max) {
                 alert('超出上界');
-                this.model = this.max;
             }
             if (this.value < this.min) {
                 alert('不能小于1');
-                this.model = this.min;
             }
         },
     },
