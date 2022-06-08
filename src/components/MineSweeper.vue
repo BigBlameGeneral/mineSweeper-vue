@@ -1,5 +1,33 @@
 <template>
     <div class="game-container">
+         <div class="panel-container">
+            <div class="panel-data-container">
+                <span
+                    class="iconfont"
+                    style="font-size: 60px;"
+                >&#xe778;</span>
+                
+                <div>
+                    {{ selectedMineCount }} / {{ mineCount }}
+                </div>
+            </div>
+            <div>
+                <button
+                    class="mine-sweeper-button"
+                    @click="reStart"
+                >
+                    重开一局
+                </button>
+
+                <button
+                    class="mine-sweeper-button"
+                    style="margin-top: 15px;"
+                    @click="$emit('selectDifficulty')"
+                >
+                    改变难度
+                </button>
+            </div>
+        </div>
         <div
             class="mine-sweeper-container"
             @contextmenu.prevent
@@ -14,8 +42,10 @@
                     :key="j"
                     class="mine-sweeper-item"
                     :class="{'is-open':openStatus[(i - 1) * width + j - 1]}"
-                    @click.left="handleLeftClick(i-1,j-1)"
+                    
                     @click.right="handleRightClick(i-1,j-1)"
+                    @click.left="handleLeftClick (i-1, j-1)"
+                    @click="start()"
                 >
                     <span
                         v-if="markStatus[(i-1)*width+(j-1)] === 1"
@@ -38,35 +68,7 @@
                 </div>
             </div>
         </div>
-        <div class="panel-container">
-            <div class="panel-data-container">
-                <span
-                    class="iconfont"
-                    style="font-size: 60px;"
-                >&#xe778;</span>
-                
-                <div>
-                    {{ selectedMineCount }} / {{ mineCount }}
-                    已找到炸弹数
-                </div>
-            </div>
-            <div>
-                <button
-                    class="mine-sweeper-button"
-                    @click="reStart"
-                >
-                    重开一局
-                </button>
-
-                <button
-                    class="mine-sweeper-button"
-                    style="margin-top: 15px;"
-                    @click="$emit('selectDifficulty')"
-                >
-                    改变难度
-                </button>
-            </div>
-        </div>
+        
     </div>
 </template>
 
@@ -106,6 +108,7 @@ export default {
             openStatus: [],//已经被点击
             markStatus: [],//已经标记
             selectedMineCount: 0,
+            loop: 0
         };
     },
     computed: {
@@ -233,14 +236,31 @@ export default {
                 this.selectedMineCount--;
             }
         },
+        start (){
+
+            clearTimeout(this.loop);//再次清空定时器，防止重复注册定时器
+
+            this.loop=setTimeout(() => {
+
+            console.log("长按了");
+
+        },  1000);
+
     },
+
+ end(){
+
+    clearTimeout(this.loop); //清空定时器，防止重复注册定时器
+
+    },
+    }
 };
 </script>
 
 <style scoped>
 .game-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: stretch;
     padding: 0 15px;
 }
 
@@ -256,10 +276,10 @@ export default {
 }
 
 .mine-sweeper-item {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     margin: 2px;
-    line-height: 50px;
+    /* line-height: 50px; */
     font-size: 34px;
     text-align: center;
     background-color: #babdb6;

@@ -5,13 +5,10 @@
             :class="{'show-customize':isShowCustomize}"
         >
             <div class="select-difficulty-section">
-                <div class="select-difficulty-row">
-                    <div
-                        class="select-difficulty-item"
-                        @click="$emit('showGame',8,8,10)"
-                    >
-                        <div>8 x 8</div>
-                        <div>10 个雷</div>
+               <!-- /// <div class="select-difficulty-row"> -->
+                    <div class="select-difficulty-item"  @click="$emit('showGame',8,8,10)" >
+                        <p>8 x 8</p>
+                        <p>10 个雷</p>
                     </div>
                     <div
                         class="select-difficulty-item"
@@ -20,9 +17,9 @@
                         <div>12 x 12</div>
                         <div>30 个雷</div>
                     </div>
-                </div>
+                <!-- </div> -->
                 <!-- 触发当前实例上的事件 -->
-                <div class="select-difficulty-row">
+                <!-- <div class="select-difficulty-row"> -->
                     <div
                         class="select-difficulty-item"
                         @click="$emit('showGame',16,16,50)"
@@ -37,7 +34,7 @@
                         <div>?</div>
                         <div>自定义</div>
                     </div>
-                </div>
+                <!-- </div> -->
             </div>
             <div class="select-difficulty-section">
                 <div>
@@ -153,13 +150,13 @@ export default {
 }
 
 .select-difficulty-item {
+    /* justify-content: center;  */
     width: 300px;
-    height: 300px;
+    height: 50px;
     margin: 15px;
     border: 2px solid #666;
     border-radius: 8px;
     text-align: center;
-    padding-top: 120px;
 }
 
 .form-group {
